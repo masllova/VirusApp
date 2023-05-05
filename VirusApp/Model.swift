@@ -7,12 +7,30 @@
 
 import Foundation
 
-import Foundation
-
 class Model: ObservableObject {
     
-    @Published var selectedFactor = 1
-    @Published var matrix = Array(repeating: Array(repeating: false, count: 8), count: 10) {
+    private var timeInterval = 3.0
+    private let col = 12
+    private let row = 30
+    @Published var selectedFactor = 4
+    
+    @Published var infectedCount = 0 {
+        didSet {
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
+        }
+        }
+    @Published var healthyCount: Int {
+        didSet {
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
+        }
+        }
+
+    
+    @Published var matrix: [[Bool]] {
         didSet {
             DispatchQueue.main.async {
                 self.objectWillChange.send()
@@ -20,23 +38,40 @@ class Model: ObservableObject {
         }
     }
 
-    private var timeInterval = 1.5
-    
+    init() {
+        self.matrix = Array(repeating: Array(repeating: false, count: col), count: row)
+        self.healthyCount = row * col
+    }
+
+    private var operationQueue = OperationQueue()
+    private var dispatchGroup = DispatchGroup()
+
     func infectionProcess(at point: (row: Int, col: Int), withInfectionFactor factor: Int) {
         matrix[point.row][point.col] = true
-        Thread.sleep(forTimeInterval: timeInterval)
-        spreadInfection(at: (point.row, point.col), withInfectionFactor: factor)
-        //Создаем новую очередь в глобальной области запускаем в ней блок кода асинхронно с паузами пока вся матрица не будет заполнена
-        DispatchQueue.global(qos: .userInitiated).async {
-            while self.matrix.contains(where: { !$0.allSatisfy({ $0 == true }) }) {
+        infectedCount += 1
+        healthyCount -= 1
+        operationQueue.addOperation {
+            self.dispatchGroup.enter()
+            DispatchQueue.main.asyncAfter(deadline: .now() + self.timeInterval) {
+                self.spreadInfection(at: (point.row, point.col), withInfectionFactor: factor)
+                self.dispatchGroup.leave()
+            }
+        }
+        operationQueue.addOperation { [self] in
+            self.dispatchGroup.wait()
+            while self.infectedCount < col*row {
                 Thread.sleep(forTimeInterval: self.timeInterval)
                 let infected = self.getInfectedPoints()
                 for i in infected {
                     self.spreadInfection(at: (i.row, i.col), withInfectionFactor: factor)
                 }
             }
+           
         }
     }
+
+
+
     
    private func spreadInfection(at point: (row: Int, col: Int), withInfectionFactor infectionFactor: Int) {
         // Генерируем список соседей
@@ -48,22 +83,30 @@ class Model: ObservableObject {
                 }
             }
         }
-        // Если количество соседей меньше infectionFactor, берем всеx соседей
-        var numInfected = min(infectionFactor, neighbors.count)
-        // Выбираем рандомных соседей, которые будут заражены
-        neighbors.shuffle()
-        for neighbor in neighbors {
-            if numInfected > 0 {
-                DispatchQueue.main.async { [self] in
-                    matrix[neighbor.row][neighbor.col] = true
-                }
+       // Если количество соседей меньше infectionFactor, выбираем рандомное число между нулем и количеством соседей
+       var numInfected = Int.random(in: 0..<min(infectionFactor, neighbors.count))
+           neighbors.shuffle()
 
-                numInfected -= 1
-            } else {
-                break
-            }
-        }
-    }
+           let localQueue = DispatchQueue(label: "localQueue")
+
+           for neighbor in neighbors {
+               if numInfected > 0 {
+                   localQueue.async { [self] in
+                       DispatchQueue.main.async {
+                           if self.matrix[neighbor.row][neighbor.col] == false {
+                               self.matrix[neighbor.row][neighbor.col] = true
+                           
+                               self.infectedCount += 1
+                               self.healthyCount -= 1
+                           }
+                       }
+                   }
+                   numInfected -= 1
+               } else {
+                   break
+               }
+           }
+       }
     
     //находим всех заражанных (тк 1 зараженный может в последсвии снова заразить кого-то)
   private func getInfectedPoints() -> [(row: Int, col: Int)] {

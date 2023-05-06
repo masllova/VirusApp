@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct SpreadOfVirusView: View {
-    @ObservedObject var model = Model(numberOfPeople: ViewModel().numberOfPeople)
+    @StateObject var model: Model
+    init(model: Model) {
+        self._model = StateObject(wrappedValue: model)
+    }
     @State private var isTapped = false
     @State var sourceOfVirus = [(Int, Int)]()
     
@@ -23,12 +26,12 @@ struct SpreadOfVirusView: View {
             ZStack {
                 Color("VirusColor")
                     .ignoresSafeArea()
-                   HStack (spacing: UIScreen.main.bounds.width / 8){
-                       Text("Healthy = \(self.model.healthyCount)")
-                           
-                       Text("Infected = \(self.model.infectedCount)")
+                   HStack (spacing: UIScreen.main.bounds.width / 10){
+                       Text("Здоровые: \(self.model.healthyCount)")
+                           .font(.title3).bold()
+                       Text("Зараженные: \(self.model.infectedCount)")
+                           .font(.title3).bold()
                    }
-                   .bold()
                    .font(.headline)
                    .lineLimit(1)
                    .padding()
@@ -36,7 +39,7 @@ struct SpreadOfVirusView: View {
                    
                }
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 10)
-
+            
             ScrollView ([.horizontal, .vertical]){
                 VStack {
                     ForEach(0..<self.model.matrix.count, id: \.self) { row in
@@ -50,7 +53,7 @@ struct SpreadOfVirusView: View {
                                         Text("☣️")
                                             .font(.title2)
                                     } else {
-                                        Text (self.model.matrix[row][col] ? "🦠" : "👤")
+                                        Text (self.model.matrix[row][col] ? "🦠" : "😄")
                                             .font(.title2)
                                     }
                                 }
@@ -64,7 +67,7 @@ struct SpreadOfVirusView: View {
                 
             }.overlay(zoomControls, alignment: .bottomTrailing)
                 
-        }
+        }.background(Color("BackgroundColor"))
         
 
     }
@@ -96,7 +99,7 @@ struct SpreadOfVirusView: View {
 
 struct SpreadOfVirusView_Previews: PreviewProvider {
     static var previews: some View {
-        SpreadOfVirusView()
+        SpreadOfVirusView(model: Model(numberOfPeople: 288, vm: ViewModel()))
     }
 }
 

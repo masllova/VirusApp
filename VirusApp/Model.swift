@@ -38,8 +38,7 @@ class Model: ObservableObject {
         }
     }
     
-    init(numberOfPeople: Int) {
-        let vm = ViewModel()
+    init(numberOfPeople: Int, vm: ViewModel) {
         let c = vm.createMatrix(for: numberOfPeople)[0]
         let r = vm.createMatrix(for: numberOfPeople)[1]
         self.col = c

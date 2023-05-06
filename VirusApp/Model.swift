@@ -9,10 +9,10 @@ import Foundation
 
 class Model: ObservableObject {
     
-    private var timeInterval = 3.0
-    private let col = 12
-    private let row = 30
-    @Published var selectedFactor = 4
+    private let timeInterval: Double
+    private let col: Int
+    private let row: Int
+     let selectedFactor: Int
     
     @Published var infectedCount = 0 {
         didSet {
@@ -37,11 +37,19 @@ class Model: ObservableObject {
             }
         }
     }
-
-    init() {
-        self.matrix = Array(repeating: Array(repeating: false, count: col), count: row)
-        self.healthyCount = row * col
+    
+    init(numberOfPeople: Int) {
+        let vm = ViewModel()
+        let c = vm.createMatrix(for: numberOfPeople)[0]
+        let r = vm.createMatrix(for: numberOfPeople)[1]
+        self.col = c
+        self.row = r
+        self.matrix = Array(repeating: Array(repeating: false, count: c), count: r)
+        self.healthyCount = r * c
+        self.selectedFactor = vm.selectedFactor
+        self.timeInterval = vm.timeInterval
     }
+
 
     private var operationQueue = OperationQueue()
     private var dispatchGroup = DispatchGroup()

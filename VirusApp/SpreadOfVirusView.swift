@@ -6,16 +6,15 @@
 //
 
 import SwiftUI
-import Combine
 
 struct SpreadOfVirusView: View {
-    @ObservedObject var model = Model()
+    @ObservedObject var model = Model(numberOfPeople: ViewModel().numberOfPeople)
     @State private var isTapped = false
     @State var sourceOfVirus = [(Int, Int)]()
     
     @State private var zoomScale: CGFloat = 1.0
     let minZoom: CGFloat = 0.5
-    let maxZoom: CGFloat = 2.0
+    let maxZoom: CGFloat = 1.5
     
     
     var body: some View {
@@ -38,7 +37,7 @@ struct SpreadOfVirusView: View {
                }
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 10)
 
-            ScrollView {
+            ScrollView ([.horizontal, .vertical]){
                 VStack {
                     ForEach(0..<self.model.matrix.count, id: \.self) { row in
                         HStack {
@@ -59,12 +58,12 @@ struct SpreadOfVirusView: View {
                         }
                     }
                 } .padding()
-                
-                    .background(Color.white)
+                    
                     .scaleEffect(zoomScale)
-                
+                    
                 
             }.overlay(zoomControls, alignment: .bottomTrailing)
+                
         }
         
 

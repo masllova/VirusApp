@@ -14,6 +14,7 @@
 		335069782A03FC6200887C2B /* SpreadOfVirusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335069772A03FC6200887C2B /* SpreadOfVirusView.swift */; };
 		3350697A2A0433DA00887C2B /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335069792A0433DA00887C2B /* MenuView.swift */; };
 		335069962A045FCA00887C2B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335069952A045FCA00887C2B /* Model.swift */; };
+		335069BC2A05C5A900887C2B /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335069BB2A05C5A900887C2B /* ViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		335069772A03FC6200887C2B /* SpreadOfVirusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpreadOfVirusView.swift; sourceTree = "<group>"; };
 		335069792A0433DA00887C2B /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		335069952A045FCA00887C2B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		335069BB2A05C5A900887C2B /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				3350696B2A03FBED00887C2B /* ContentView.swift */,
 				335069772A03FC6200887C2B /* SpreadOfVirusView.swift */,
 				335069952A045FCA00887C2B /* Model.swift */,
+				335069BB2A05C5A900887C2B /* ViewModel.swift */,
 				335069792A0433DA00887C2B /* MenuView.swift */,
 				3350696D2A03FBEF00887C2B /* Assets.xcassets */,
 				3350696F2A03FBEF00887C2B /* Preview Content */,
@@ -150,6 +153,7 @@
 				335069782A03FC6200887C2B /* SpreadOfVirusView.swift in Sources */,
 				3350697A2A0433DA00887C2B /* MenuView.swift in Sources */,
 				3350696C2A03FBED00887C2B /* ContentView.swift in Sources */,
+				335069BC2A05C5A900887C2B /* ViewModel.swift in Sources */,
 				3350696A2A03FBED00887C2B /* VirusAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

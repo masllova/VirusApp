@@ -48,31 +48,30 @@ class Model: ObservableObject {
         self.timeInterval = vm.timeInterval + 1.0 // прибавляем тк кастомный слайдер начинается с 0
     }
     
-    private var operationQueue = OperationQueue()
-    private var dispatchGroup = DispatchGroup()
-    private let localQueue = DispatchQueue(label: "localQueue")
     
+    private let localQueue = DispatchQueue(label: "localQueue") // создание локального потока
+    private var timer: Timer?
+
     func infectionProcess(at point: (row: Int, col: Int), withInfectionFactor factor: Int) {
-        matrix[point.row][point.col] = true // источник заражения
+        // помечаем источник инфекции (место вызова функции) и обновляем счетчики
+        matrix[point.row][point.col] = true
         infectedCount += 1
         healthyCount -= 1
-        operationQueue.addOperation {
-            self.dispatchGroup.enter()
-            DispatchQueue.main.asyncAfter(deadline: .now() + self.timeInterval) {
-                self.spreadInfection(at: (point.row, point.col), withInfectionFactor: factor)
-                self.dispatchGroup.leave()
+        
+        // Остановка предыдущего таймера и создание нового с новым интервалом времени, если этой нужно
+        timer?.invalidate()
+        
+        timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            let infected = self.getInfectedPoints()
+            for i in infected {
+                self.spreadInfection(at: (i.row, i.col), withInfectionFactor: factor)
             }
         }
-        operationQueue.addOperation { [self] in
-            self.dispatchGroup.wait()
-            while self.infectedCount < col*row {
-                Thread.sleep(forTimeInterval: self.timeInterval)
-                let infected = self.getInfectedPoints()
-                for i in infected {
-                    self.spreadInfection(at: (i.row, i.col), withInfectionFactor: factor)
-                }
-            }
-            
+        
+        localQueue.asyncAfter(deadline: .now() + timeInterval) { [weak self] in
+            guard let self = self else { return }
+            self.spreadInfection(at: point, withInfectionFactor: factor)
         }
     }
     
@@ -87,7 +86,7 @@ class Model: ObservableObject {
             }
         }
         // Если количество соседей меньше infectionFactor, выбираем рандомное число между нулем и количеством соседей
-        var numInfected = Int.random(in: 0..<min(infectionFactor, neighbors.count))
+        var numInfected = Int.random(in: 0...min(infectionFactor, neighbors.count))
         neighbors.shuffle()
         
         for neighbor in neighbors {
@@ -109,7 +108,7 @@ class Model: ObservableObject {
         }
     }
     
-    //находим всех заражанных (тк 1 зараженный может в последсвии снова заразить кого-то)
+    //тк зараженный может впоследствии снова заразить, если в прошлый раз не вышло, то просто находим всех зареженных, чтобы запустить для них функцию
     private func getInfectedPoints() -> [(row: Int, col: Int)] {
         var infectedPoints = [(row: Int, col: Int)]()
         for row in 0..<matrix.count {

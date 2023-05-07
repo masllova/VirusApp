@@ -18,16 +18,23 @@ struct MenuView: View {
     var body: some View {
         ZStack {
             Color("BackgroundColor").ignoresSafeArea()
+            
+            VStack{
+                HStack {
+                    Spacer()
+                    InfAlert()
+                }.padding(.horizontal)
+                Spacer()
+            }.padding(.bottom)
+            
             VStack (spacing: 30) {
                 Text("Симулятор вируса")
                     .foregroundColor(Color("AccentOrangeColor"))
                     .font(.system(size: UIScreen.main.bounds.width / 10))
                     .bold()
                     .multilineTextAlignment(.center)
-                    .padding(.top)
-                Image("Icon")
-                       .resizable()
-                       .frame(width: UIScreen.main.bounds.width / 5, height:  UIScreen.main.bounds.width / 5)
+                    .padding(.top, UIScreen.main.bounds.height / 10)
+                
                 VStack {
                     HStack {
                         Text("Размер группы")
@@ -81,7 +88,7 @@ struct MenuView: View {
                         .font(.title2).bold()
                         .foregroundColor(.white)
                 }.sheet(isPresented: $showSimulator) {
-                    SpreadOfVirusView(model: Model(numberOfPeople: vm.numberOfPeople, vm: vm))
+                    SpreadOfVirusView(model: Model(vm: vm))
                         
                 }
                 .padding()

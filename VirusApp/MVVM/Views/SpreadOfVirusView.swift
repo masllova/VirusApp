@@ -9,11 +9,12 @@ import SwiftUI
 
 struct SpreadOfVirusView: View {
     @StateObject var model: Model
-    init(model: Model) {
-        self._model = StateObject(wrappedValue: model)
-    }
+    init(model: Model) {self._model = StateObject(wrappedValue: model)}
+    
     @State private var isTapped = false
-    @State var sourceOfVirus = [(Int, Int)]()
+    @State var sourceOfVirus = [(Int, Int)]() //для учета источников заражения ☣️
+    
+    @Environment(\.presentationMode) var presentationMode
     
     @State private var zoomScale: CGFloat = 1.0
     let minZoom: CGFloat = 0.5
@@ -25,15 +26,31 @@ struct SpreadOfVirusView: View {
             ZStack {
                 Color("VirusColor")
                     .ignoresSafeArea()
-                HStack (spacing: UIScreen.main.bounds.width / 10){
-                    Text("Здоровые: \(self.model.healthyCount)")
-                        .font(.title3).bold()
-                    Text("Зараженные: \(self.model.infectedCount)")
-                        .font(.title3).bold()
+                VStack{
+                    Button {
+                        self.presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "chevron.down")
+                            .foregroundColor(.white)
+                    }.padding(.top)
+                    Spacer()
                 }
-                .font(.headline)
+                HStack (spacing: UIScreen.main.bounds.width / 10){
+                    if model.healthyCount == 0 {
+                        Text("Вирус распространился")
+                        .font(.headline).bold()
+                    }
+                    else {
+                        Text("Здоровые: \(self.model.healthyCount)")
+                            .font(.headline).bold()
+                        Text("Зараженные: \(self.model.infectedCount)")
+                            .font(.headline).bold()
+                    }
+                }
+                
                 .lineLimit(1)
                 .padding()
+                .padding(.top)
                 .foregroundColor(.white)
             }
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 10)
@@ -44,15 +61,14 @@ struct SpreadOfVirusView: View {
                         HStack {
                             ForEach(0..<self.model.matrix[0].count, id: \.self) { col in
                                 Button(action: {
-                                    self.model.infectionProcess(at: (row, col), withInfectionFactor: self.model.selectedFactor)
-                                    sourceOfVirus.append((row, col))
+                                    self.model.infectionProcess(at: (row, col),
+                                                                withInfectionFactor: self.model.selectedFactor)
+                                    sourceOfVirus.append((row, col))//для учета источников заражения
                                 }) {
-                                    if  sourceOfVirus.contains(where: { $0 == (row, col)}) {
-                                        Text("☣️")
-                                            .font(.title2)
+                                    if sourceOfVirus.contains(where: { $0 == (row, col)}) {
+                                        Text("☣️").font(.title2)
                                     } else {
-                                        Text (self.model.matrix[row][col] ? "🦠" : "👤")
-                                            .font(.title2)
+                                        Text (self.model.matrix[row][col] ? "🦠" : "👤").font(.title2)
                                     }
                                 }
                             }
@@ -72,8 +88,6 @@ struct SpreadOfVirusView: View {
             Button {zoomScale = max(zoomScale - 0.1, minZoom)} label: {
                 Image(systemName: "minus.magnifyingglass")
             }
-            
-            
         }
         .font(.title)
         .foregroundColor(Color("VirusColor"))
@@ -87,7 +101,7 @@ struct SpreadOfVirusView: View {
 
 struct SpreadOfVirusView_Previews: PreviewProvider {
     static var previews: some View {
-        SpreadOfVirusView(model: Model(numberOfPeople: 25, vm: ViewModel()))
+        SpreadOfVirusView(model: Model(vm: ViewModel()))
     }
 }
 

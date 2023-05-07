@@ -37,22 +37,23 @@ class Model: ObservableObject {
         }
     }
     
-    init(numberOfPeople: Int, vm: ViewModel) {
-        let c = vm.createMatrix(for: numberOfPeople)[0]
-        let r = vm.createMatrix(for: numberOfPeople)[1]
+    init(vm: ViewModel) {
+        let c = vm.createMatrix(for: vm.numberOfPeople)[0]
+        let r = vm.createMatrix(for: vm.numberOfPeople)[1]
         self.col = c
         self.row = r
         self.matrix = Array(repeating: Array(repeating: false, count: c), count: r)
-        self.healthyCount = r * c
-        self.selectedFactor = vm.selectedFactor + 1
-        self.timeInterval = vm.timeInterval + 1.0
+        self.healthyCount = vm.numberOfPeople
+        self.selectedFactor = vm.selectedFactor + 1 // прибавляем тк кастомный слайдер начинается с 0
+        self.timeInterval = vm.timeInterval + 1.0 // прибавляем тк кастомный слайдер начинается с 0
     }
     
     private var operationQueue = OperationQueue()
     private var dispatchGroup = DispatchGroup()
+    private let localQueue = DispatchQueue(label: "localQueue")
     
     func infectionProcess(at point: (row: Int, col: Int), withInfectionFactor factor: Int) {
-        matrix[point.row][point.col] = true
+        matrix[point.row][point.col] = true // источник заражения
         infectedCount += 1
         healthyCount -= 1
         operationQueue.addOperation {
@@ -88,8 +89,6 @@ class Model: ObservableObject {
         // Если количество соседей меньше infectionFactor, выбираем рандомное число между нулем и количеством соседей
         var numInfected = Int.random(in: 0..<min(infectionFactor, neighbors.count))
         neighbors.shuffle()
-        
-        let localQueue = DispatchQueue(label: "localQueue")
         
         for neighbor in neighbors {
             if numInfected > 0 {

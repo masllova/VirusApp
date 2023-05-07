@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		33126B322A06D27500034FC7 /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33126B312A06D27500034FC7 /* SliderView.swift */; };
 		3350696A2A03FBED00887C2B /* VirusAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335069692A03FBED00887C2B /* VirusAppApp.swift */; };
-		3350696C2A03FBED00887C2B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3350696B2A03FBED00887C2B /* ContentView.swift */; };
 		3350696E2A03FBEF00887C2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3350696D2A03FBEF00887C2B /* Assets.xcassets */; };
 		335069712A03FBEF00887C2B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 335069702A03FBEF00887C2B /* Preview Assets.xcassets */; };
 		335069782A03FC6200887C2B /* SpreadOfVirusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335069772A03FC6200887C2B /* SpreadOfVirusView.swift */; };
@@ -22,7 +21,6 @@
 		33126B312A06D27500034FC7 /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
 		335069662A03FBED00887C2B /* VirusApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirusApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		335069692A03FBED00887C2B /* VirusAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirusAppApp.swift; sourceTree = "<group>"; };
-		3350696B2A03FBED00887C2B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3350696D2A03FBEF00887C2B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		335069702A03FBEF00887C2B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		335069772A03FC6200887C2B /* SpreadOfVirusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpreadOfVirusView.swift; sourceTree = "<group>"; };
@@ -62,12 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				335069692A03FBED00887C2B /* VirusAppApp.swift */,
-				3350696B2A03FBED00887C2B /* ContentView.swift */,
-				335069772A03FC6200887C2B /* SpreadOfVirusView.swift */,
-				335069952A045FCA00887C2B /* Model.swift */,
-				335069BB2A05C5A900887C2B /* ViewModel.swift */,
-				335069792A0433DA00887C2B /* MenuView.swift */,
-				33126B312A06D27500034FC7 /* SliderView.swift */,
+				33D4F2F12A07050E001E6644 /* MVVM */,
 				3350696D2A03FBEF00887C2B /* Assets.xcassets */,
 				3350696F2A03FBEF00887C2B /* Preview Content */,
 			);
@@ -80,6 +73,26 @@
 				335069702A03FBEF00887C2B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		33D4F2F12A07050E001E6644 /* MVVM */ = {
+			isa = PBXGroup;
+			children = (
+				335069952A045FCA00887C2B /* Model.swift */,
+				335069BB2A05C5A900887C2B /* ViewModel.swift */,
+				33D4F2F22A070539001E6644 /* Views */,
+			);
+			path = MVVM;
+			sourceTree = "<group>";
+		};
+		33D4F2F22A070539001E6644 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				335069792A0433DA00887C2B /* MenuView.swift */,
+				335069772A03FC6200887C2B /* SpreadOfVirusView.swift */,
+				33126B312A06D27500034FC7 /* SliderView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,7 +168,6 @@
 				335069962A045FCA00887C2B /* Model.swift in Sources */,
 				335069782A03FC6200887C2B /* SpreadOfVirusView.swift in Sources */,
 				3350697A2A0433DA00887C2B /* MenuView.swift in Sources */,
-				3350696C2A03FBED00887C2B /* ContentView.swift in Sources */,
 				335069BC2A05C5A900887C2B /* ViewModel.swift in Sources */,
 				3350696A2A03FBED00887C2B /* VirusAppApp.swift in Sources */,
 				33126B322A06D27500034FC7 /* SliderView.swift in Sources */,
@@ -290,11 +302,13 @@
 				DEVELOPMENT_TEAM = C9GRWZY5P5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Virus Inc";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -303,9 +317,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Alexandra.VirusApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -320,11 +337,13 @@
 				DEVELOPMENT_TEAM = C9GRWZY5P5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Virus Inc";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -333,9 +352,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Alexandra.VirusApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

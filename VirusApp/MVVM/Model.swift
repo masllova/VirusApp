@@ -12,7 +12,7 @@ class Model: ObservableObject {
     private let timeInterval: Double
     private let col: Int
     private let row: Int
-     let selectedFactor: Int
+    let selectedFactor: Int
     
     @Published var infectedCount = 0 {
         didSet {
@@ -20,15 +20,14 @@ class Model: ObservableObject {
                 self.objectWillChange.send()
             }
         }
-        }
+    }
     @Published var healthyCount: Int {
         didSet {
             DispatchQueue.main.async {
                 self.objectWillChange.send()
             }
         }
-        }
-
+    }
     
     @Published var matrix: [[Bool]] {
         didSet {
@@ -45,14 +44,13 @@ class Model: ObservableObject {
         self.row = r
         self.matrix = Array(repeating: Array(repeating: false, count: c), count: r)
         self.healthyCount = r * c
-        self.selectedFactor = vm.selectedFactor
-        self.timeInterval = vm.timeInterval
+        self.selectedFactor = vm.selectedFactor + 1
+        self.timeInterval = vm.timeInterval + 1.0
     }
-
-
+    
     private var operationQueue = OperationQueue()
     private var dispatchGroup = DispatchGroup()
-
+    
     func infectionProcess(at point: (row: Int, col: Int), withInfectionFactor factor: Int) {
         matrix[point.row][point.col] = true
         infectedCount += 1
@@ -73,14 +71,11 @@ class Model: ObservableObject {
                     self.spreadInfection(at: (i.row, i.col), withInfectionFactor: factor)
                 }
             }
-           
+            
         }
     }
-
-
-
     
-   private func spreadInfection(at point: (row: Int, col: Int), withInfectionFactor infectionFactor: Int) {
+    private func spreadInfection(at point: (row: Int, col: Int), withInfectionFactor infectionFactor: Int) {
         // Генерируем список соседей
         var neighbors = [(row: Int, col: Int)]()
         for row in (point.row - 1)...(point.row + 1) {
@@ -90,33 +85,33 @@ class Model: ObservableObject {
                 }
             }
         }
-       // Если количество соседей меньше infectionFactor, выбираем рандомное число между нулем и количеством соседей
-       var numInfected = Int.random(in: 0..<min(infectionFactor, neighbors.count))
-           neighbors.shuffle()
-
-           let localQueue = DispatchQueue(label: "localQueue")
-
-           for neighbor in neighbors {
-               if numInfected > 0 {
-                   localQueue.async { [self] in
-                       DispatchQueue.main.async {
-                           if self.matrix[neighbor.row][neighbor.col] == false {
-                               self.matrix[neighbor.row][neighbor.col] = true
-                           
-                               self.infectedCount += 1
-                               self.healthyCount -= 1
-                           }
-                       }
-                   }
-                   numInfected -= 1
-               } else {
-                   break
-               }
-           }
-       }
+        // Если количество соседей меньше infectionFactor, выбираем рандомное число между нулем и количеством соседей
+        var numInfected = Int.random(in: 0..<min(infectionFactor, neighbors.count))
+        neighbors.shuffle()
+        
+        let localQueue = DispatchQueue(label: "localQueue")
+        
+        for neighbor in neighbors {
+            if numInfected > 0 {
+                localQueue.async { [self] in
+                    DispatchQueue.main.async {
+                        if self.matrix[neighbor.row][neighbor.col] == false {
+                            self.matrix[neighbor.row][neighbor.col] = true
+                            
+                            self.infectedCount += 1
+                            self.healthyCount -= 1
+                        }
+                    }
+                }
+                numInfected -= 1
+            } else {
+                break
+            }
+        }
+    }
     
     //находим всех заражанных (тк 1 зараженный может в последсвии снова заразить кого-то)
-  private func getInfectedPoints() -> [(row: Int, col: Int)] {
+    private func getInfectedPoints() -> [(row: Int, col: Int)] {
         var infectedPoints = [(row: Int, col: Int)]()
         for row in 0..<matrix.count {
             for col in 0..<matrix[0].count {

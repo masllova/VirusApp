@@ -9,25 +9,28 @@ import SwiftUI
 
 struct MenuView: View {
     @StateObject var vm = ViewModel()
-    
     @State private var showSimulator = false
+    
     @State private var selectedInd: Double = 0
     @State private var infFactor = 0.0
     @State private var updateTimer = 0.0
+    
     var body: some View {
         ZStack {
             Color("BackgroundColor").ignoresSafeArea()
-            VStack (spacing: 50) {
+            VStack (spacing: 30) {
                 Text("Симулятор вируса")
                     .foregroundColor(Color("AccentOrangeColor"))
-                    .font(.system(size: 40))
+                    .font(.system(size: UIScreen.main.bounds.width / 10))
                     .bold()
                     .multilineTextAlignment(.center)
                     .padding(.top)
-                Spacer()
+                Image("Icon")
+                       .resizable()
+                       .frame(width: UIScreen.main.bounds.width / 5, height:  UIScreen.main.bounds.width / 5)
                 VStack {
                     HStack {
-                        Text("Размер групы")
+                        Text("Размер группы")
                             .font(.title2).bold()
                         Spacer()
                         Text("\(vm.range[Int(selectedInd)])")
@@ -49,10 +52,9 @@ struct MenuView: View {
                     }
                     
                     LockerSlider(value: $infFactor, in: 0...9)
-                        .onChange(of: infFactor) { value in
-                            vm.selectedFactor = Int(value + 1)
-                        }
+                        .onChange(of: infFactor) { value in vm.selectedFactor = Int(value) }
                         .frame(width: UIScreen.main.bounds.width / 1.2, height: UIScreen.main.bounds.height / 15)
+                    
                     HStack {
                         Text("Темп заражения (сек)")
                             .font(.title2).bold()
@@ -62,9 +64,7 @@ struct MenuView: View {
                     }
                     
                     LockerSlider(value: $updateTimer, in: 0...9)
-                        .onChange(of: updateTimer) { value in
-                            vm.timeInterval = Double(value + 1)
-                        }
+                        .onChange(of: updateTimer) { value in vm.timeInterval = Double(value) }
                         .frame(width: UIScreen.main.bounds.width / 1.2, height: UIScreen.main.bounds.height / 15)
                     
                 }.padding()
@@ -76,15 +76,16 @@ struct MenuView: View {
                     .padding(.horizontal)
                     .padding(.top)
                 
-                
                 Button(action: {self.showSimulator.toggle()}) {
                     Text("Запустить моделирование")
                         .font(.title2).bold()
                         .foregroundColor(.white)
                 }.sheet(isPresented: $showSimulator) {
                     SpreadOfVirusView(model: Model(numberOfPeople: vm.numberOfPeople, vm: vm))
+                        
                 }
                 .padding()
+                .padding(.vertical, UIScreen.main.bounds.width / 45)
                 .background(Capsule().foregroundColor(Color("VirusColor")).shadow(radius: 10))
                 Spacer()
             }

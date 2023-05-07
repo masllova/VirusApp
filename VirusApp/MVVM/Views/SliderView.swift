@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct LockerSlider<V>: View where V : BinaryFloatingPoint, V.Stride : BinaryFloatingPoint {
-
-    // MARK: - Value
-    // MARK: Private
+    
     @Binding private var value: V
     private let bounds: ClosedRange<V>
     private let step: V.Stride
@@ -32,7 +30,6 @@ struct LockerSlider<V>: View where V : BinaryFloatingPoint, V.Stride : BinaryFlo
 
 
     // MARK: - View
-    // MARK: Public
     var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .leading) {
@@ -68,7 +65,6 @@ struct LockerSlider<V>: View where V : BinaryFloatingPoint, V.Stride : BinaryFlo
 
 
     // MARK: - Function
-    // MARK: Private
     private func updateStatus(value: DragGesture.Value, proxy: GeometryProxy) {
         guard startX == nil else { return }
     
